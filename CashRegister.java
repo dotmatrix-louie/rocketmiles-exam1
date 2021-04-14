@@ -75,7 +75,7 @@ public class CashRegister {
 			System.out.println("Sorry!");
 		} else {
 			int[] regslots2 = registerSlots.clone();
-			int counterLoop = 10;
+			int counterLoop = 0;
 			int origAmt = amt;
 			boolean hasMoney = true;
 			do {
