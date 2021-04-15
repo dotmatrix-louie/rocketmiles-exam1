@@ -6,11 +6,9 @@ public class CashRegister {
 
 	private static int[] registerDenomination = { 20, 10, 5, 2, 1 };
 	private static int[] registerSlots = { 1, 2, 3, 4, 5 };
-	private static String lastCmd = "";
 
 	public static void showContents(int[] slots) {
-		System.out.println("$" + getTotalCash(slots) + " " + slots[0] + " " + slots[1] + " " + slots[2] + " " + slots[3]
-				+ " " + slots[4]);
+		System.out.println("$" + getTotalCash(slots) + ": " + slots[0] + " | " + slots[1] + " | " + slots[2] + " | " + slots[3] + " | " + slots[4]);
 	}
 
 	public static int getTotalCash(int[] registerSlots) {
@@ -46,10 +44,23 @@ public class CashRegister {
 		String[] cashes = cash.split(" ");
 		try {
 // start with 0 to 5
+			int[] regslots2 = registerSlots.clone();
+			boolean noIssue = true; 
 			if (cashes.length == 5) {
 				for (int i = 0; i < 5; i++) {
 					int val = Integer.parseInt(cashes[i]);
-					registerSlots[i] = registerSlots[i] - val;
+					if(regslots2[i] - val>=0) {
+						regslots2[i] = regslots2[i] - val;
+					}else {
+						System.err.println("Sorry");
+						noIssue = false;
+						break;
+					}
+				}
+				if(noIssue) {
+					for(int i = 0 ; i < 5 ; i++) {
+						registerSlots[i] = regslots2[i];
+					}
 				}
 			} else {
 				System.err.println(
@@ -58,6 +69,8 @@ public class CashRegister {
 		} catch (Exception e) {
 			System.err.println("Wrong Input!");
 		}
+		
+		
 		showContents(registerSlots);
 	}
 
@@ -71,7 +84,7 @@ public class CashRegister {
 			System.err.println("Wrong Input!");
 		}
 //System.out.println(getTotalCash(registerSlots));
-		if (getTotalCash(registerSlots) <= amt) {
+		if (getTotalCash(registerSlots) < amt) {
 			System.out.println("Sorry!");
 		} else {
 			int[] regslots2 = registerSlots.clone();
@@ -112,22 +125,6 @@ public class CashRegister {
 						//continue;
 					} 
 
-					//if (registerDenomination[i] > amt) {
-//need to divide here
-					//	continue;
-					//} else {
-					//	if (registerSlots[i] >= newamtdiv) {
-					//		registerSlots[i] = registerSlots[i] - 1;
-					//		amt -= registerDenomination[i];
-//							changeSlots[i] = changeSlots[i] + 1;// get the $bill
-//							continue;
-//						} else {
-//grab 1
-						/*	registerSlots[i] = registerSlots[i] - 1;
-							amt -= registerDenomination[i];
-							changeSlots[i] = changeSlots[i] + 1;// get 1 $bill
-						}*/
-					//}
 				}
 //				System.out.println(amt);
 				
@@ -137,7 +134,7 @@ public class CashRegister {
 					counterLoop++;
 				}
 				
-				if(counterLoop>3) {
+				if(counterLoop>2) {
 					hasMoney = false;
 				}
 			} while (amt > 0 && hasMoney);
